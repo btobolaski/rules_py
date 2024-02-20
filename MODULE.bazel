@@ -45,7 +45,7 @@ crate.from_cargo(
         "//py/tools/unpack_bin:Cargo.toml",
     ],
 )
-use_repo(crate, "crates")
+use_repo(crate, "crate_index")
 
 register_toolchains(
     "@aspect_rules_py//py/tools/...",
