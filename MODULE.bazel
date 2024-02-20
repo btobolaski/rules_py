@@ -2,8 +2,8 @@
 
 module(
     name = "aspect_rules_py",
-    compatibility_level = 1,
     version = "0.0.0",
+    compatibility_level = 1,
 )
 
 # Lower-bound versions of direct dependencies.
@@ -16,9 +16,9 @@ bazel_dep(name = "rules_rust", version = "0.39.0")
 
 archive_override(
     module_name = "rules_python",
-    urls = "https://github.com/bazelbuild/rules_python/archive/52381415be9d3618130f02a821aef50de1e3af09.tar.gz",
     integrity = "sha256-pYfEFNWqygSEElDYgJsuIeDYn9oll/rZB0GcR+6rirA=",
     strip_prefix = "rules_python-52381415be9d3618130f02a821aef50de1e3af09",
+    urls = "https://github.com/bazelbuild/rules_python/archive/52381415be9d3618130f02a821aef50de1e3af09.tar.gz",
 )
 
 # Configure rust toolchain
@@ -45,10 +45,14 @@ crate.from_cargo(
         "//py/tools/unpack_bin:Cargo.toml",
     ],
 )
+crate.annotation(
+    build_script_env = {
+        "OPENSSL_NO_VENDOR": "1",
+    },
+    crate = "openssl-sys",
+)
 use_repo(crate, "crate_index")
 
 register_toolchains(
     "@aspect_rules_py//py/tools/...",
 )
-
-
