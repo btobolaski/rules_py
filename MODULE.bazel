@@ -34,6 +34,19 @@ use_repo(rust, "rust_toolchains")
 
 register_toolchains("@rust_toolchains//:all")
 
+crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+crate.from_cargo(
+    name = "crates",
+    cargo_lockfile = "//:Cargo.lock",
+    manifests = [
+        "//:Cargo.toml",
+        "//py/tools/py:Cargo.toml",
+        "//py/tools/venv_bin:Cargo.toml",
+        "//py/tools/unpack_bin:Cargo.toml",
+    ],
+)
+use_repo(crate, "crates")
+
 register_toolchains(
     "@aspect_rules_py//py/tools/...",
 )
