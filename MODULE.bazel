@@ -13,6 +13,9 @@ bazel_dep(name = "bazel_skylib", version = "1.4.2")
 bazel_dep(name = "rules_python", version = "0.29.0")
 bazel_dep(name = "platforms", version = "0.0.8")
 bazel_dep(name = "rules_rust", version = "0.39.0")
+bazel_dep(name = "rules_cc", version = "0.0.9")
+bazel_dep(name = "rules_foreign_cc", version = "0.10.1")
+bazel_dep(name = "rules_perl", version = "0.2.0")
 
 archive_override(
     module_name = "rules_python",
@@ -34,6 +37,9 @@ use_repo(rust, "rust_toolchains")
 
 register_toolchains("@rust_toolchains//:all")
 
+openssl_repo = use_extension("//vendor/openssl:openssl_repo_extension.bzl", "openssl_repo")
+use_repo(openssl_repo, "openssl")
+
 crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
 crate.from_cargo(
     name = "crate_index",
@@ -46,10 +52,17 @@ crate.from_cargo(
     ],
 )
 crate.annotation(
+    build_script_data = [
+        "@openssl//:gen_dir",
+        "@openssl//:openssl",
+    ],
+    build_script_data_glob = ["build/**/*.c"],
     build_script_env = {
-        "OPENSSL_NO_VENDOR": "1",
+        "OPENSSL_STATIC": "1",
     },
     crate = "openssl-sys",
+    data = ["@openssl"],
+    deps = ["@openssl"],
 )
 use_repo(crate, "crate_index")
 
