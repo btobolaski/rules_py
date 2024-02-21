@@ -1,5 +1,6 @@
 # buildifier: disable=module-docstring
 load("//py:defs.bzl", "py_binary_rule", "py_library")
+load("@pypi//:requirements.bzl", "requirement")
 
 def click_cli_binary(name, deps = [], **kwargs):
     py_library(
@@ -14,7 +15,7 @@ def click_cli_binary(name, deps = [], **kwargs):
         main = "//py/tests/external-deps/custom-macro:__main__.py",
         deps = deps + [
             name + "_lib",
-            "@pypi_click//:pkg",
+            requirement("click"),
         ],
         **kwargs
     )
