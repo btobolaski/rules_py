@@ -58,19 +58,6 @@ crate.from_cargo(
         "//py/tools/unpack_bin:Cargo.toml",
     ],
 )
-crate.annotation(
-    build_script_data = [
-        "@@openssl//:gen_dir",
-        "@@openssl//:openssl",
-    ],
-    build_script_data_glob = ["build/**/*.c"],
-    build_script_env = {
-        "OPENSSL_STATIC": "1",
-    },
-    crate = "openssl-sys",
-    data = ["@@openssl"],
-    deps = ["@@openssl"],
-)
 use_repo(crate, "crate_index")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
